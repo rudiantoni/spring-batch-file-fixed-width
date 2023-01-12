@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  batch_database:
+    container_name: postgres_batch_db
+    image: rudiantoni/postgres:15
+    environment:
+      - "POSTGRES_DB=${DB_METADATA_DATABASE}"
+      - "POSTGRES_USER=${DB_METADATA_USERNAME}"
+      - "POSTGRES_PASSWORD=${DB_METADATA_PASSWORD}"
+      - "POSTGRES_ADDITIONAL_DBS=${DB_DATASOURCE_DATABASE}"
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: psql --echo-all --username ${DB_METADATA_USERNAME} --dbname ${DB_DATASOURCE_DATABASE} --command="SELECT VERSION();"
+      interval: 10s
+      retries: 15
+      start_period: 5s
+      timeout: 20s
+  batch_application:
+    container_name: database_double_batch_app
+    image: batch/app-database-double
+    depends_on:
+      batch_database:
+        condition: service_healthy
+    environment:
+      - "PROFILE=${CURRENT_PROFILE}"
+      - "JOB_PARAMETER_NAME=${JOB_PARAMETER_NAME}"
+      - "BATCH_META_DB_HOST=${DB_METADATA_HOST}"
+      - "BATCH_META_DB_PORT=${DB_METADATA_PORT}"
+      - "BATCH_META_DB_NAME=${DB_METADATA_DATABASE}"
+      - "BATCH_META_DB_USER=${DB_METADATA_USERNAME}"
+      - "BATCH_META_DB_PASS=${DB_METADATA_PASSWORD}"
+      - "BATCH_SRC_DB_HOST=${DB_DATASOURCE_HOST}"
+      - "BATCH_SRC_DB_PORT=${DB_DATASOURCE_PORT}"
+      - "BATCH_SRC_DB_NAME=${DB_DATASOURCE_DATABASE}"
+      - "BATCH_SRC_DB_USER=${DB_DATASOURCE_USERNAME}"
+      - "BATCH_SRC_DB_PASS=${DB_DATASOURCE_PASSWORD}"
