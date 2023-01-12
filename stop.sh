@@ -1,3 +1,2 @@
 #!/bin/sh
-cd ./docker
-sudo docker-compose down
+sh script/stop.sh

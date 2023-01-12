@@ -21,6 +21,6 @@ VOLUME /tmp
 COPY --from=builder /opt/app/build/libs/*-SNAPSHOT.jar /app.jar
 
 ENV PROFILE="default"
-ENV JOB_PARAMETER_CUSTOMER_FILE="customers.txt"
+ENV JOB_PARAMETER_CUSTOMER_FILE="default"
 
-ENTRYPOINT java -jar -Dspring.profiles.active=${PROFILE} /app.jar "customerFile=file:/${JOB_PARAMETER_CUSTOMER_FILE}"
+ENTRYPOINT java -jar -Dspring.profiles.active=${PROFILE} /app.jar "customerFile=file:/opt/app/${JOB_PARAMETER_CUSTOMER_FILE}"
