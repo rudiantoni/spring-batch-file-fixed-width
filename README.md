@@ -24,8 +24,9 @@
 
 ### Other settings
 - Between various other settings available in the file *environment.env*, the ones that you may be interested are the following:
-    - **JOB_PARAMETER_CUSTOMER_FILE**: data source file name (without trailing and leading slash).
-    - **JOB_PARAMETER_CUSTOMER_FILE_DIR**: data source file directory (without trailing slash).
+    - **JOB_PARAMETER_CUSTOMER_FILE**: data source file name (without trailing and leading slash): Default: *customers.txt*. 
+    - **JOB_PARAMETER_CUSTOMER_FILE_DIR**: data source file directory (without trailing slash): Default: *../files*.
+        - Note: Currently the data source file (customers.txt) is located at: *./docker/files*. It's mounted as a volume, sharing its contents with the container.
 
 ## Stopping
 - Run the file *stop.sh* with: `sh stop.sh` to fully stop and remove the application containers.
